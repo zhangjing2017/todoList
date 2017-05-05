@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .del{
+            text-decoration:line-through;
+            color: #ccc;
+        }
+    </style>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<!--导航-->
+<div class="navbar navbar-inverse">
+    <div class="container-fluid container">
+        <div class="navbar-header">
+            <a class="navbar-brand">ToDoList</a>
+        </div>
+    </div>
+</div>
+<!--下面是代办事项-->
+<div class="container" id="app">
+    <div class="h4 text-danger">
+        亲，你还有{{total}}件事要办
+    </div>
+    <input type="text" class="form-control" placeholder="请输入，你要办的事情" v-model="editTodo" @keyup.enter="addTodo">
+    <ul class="nav nav-pills">
+        <li :class="{active:state=='complete'}">
+            <a href="#complete">全部完成</a>
+        </li>
+        <li :class="{active:state=='finish'}"><a href="#finish">已完成</a></li>
+        <li :class="{active:state=='unfinish'}"><a href="#unfinish">未完成</a></li>
+    </ul>
+    <ul class="list-group">
+        <!--如果当前li上有del样式，则表示完成了-->
+        <!--1.实现勾选添加del样式-->
+        <!--2.计算出待办数量-->
+        <li class="list-group-item" v-for="todo in cloneTodo" :class="{del:todo.isChecked}" @dblclick="changeTitle(todo)">
+            <!--双击时，告诉改的是哪一项-->
+            <!--当前循环这一项和存的这一项相等，应该显示的是输入框-->
+            <div v-show="currentTodo!=todo">
+                <input type="checkbox" v-model="todo.isChecked">
+                <span>{{todo.title}}</span>
+                <button class="pull-right" @click="remove(todo)">&times;</button>
+            </div>
+            <input type="text" v-model="todo.title" v-show="currentTodo==todo" @keyup.enter="reset" @blur="reset" v-auto-focus="currentTodo==todo">
+        </li>
+    </ul>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="todo.js"></script>
+</body>
+</html>
